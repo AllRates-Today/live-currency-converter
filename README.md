@@ -1,5 +1,7 @@
 # live-currency-rates
 
+[![Powered by AllRatesToday](https://img.shields.io/badge/Powered%20by-AllRatesToday-orange.svg)](https://allratestoday.com)
+
 Convert currencies with live exchange rates. Simple, fluent API. Multiple providers — use a free one (no key) or bring your own.
 
 [![npm](https://img.shields.io/npm/v/live-currency-rates?color=cb3837)](https://www.npmjs.com/package/live-currency-rates)
