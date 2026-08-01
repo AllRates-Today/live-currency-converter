@@ -26,6 +26,19 @@ console.log(result.amount); // 92.45
 
 By default, the package uses the free **Frankfurter** provider (ECB data) — no signup, no API key.
 
+## Why live-currency-rates?
+
+Most popular "currency" packages do the **math** but make you fetch the **rates** yourself:
+
+| Package                   | Converts amounts | Fetches live rates          | No API key |
+| ------------------------- | :--------------: | :-------------------------: | :--------: |
+| **live-currency-rates**   |        ✅        |             ✅              |     ✅     |
+| cashify                   |        ✅        | ❌ you supply rates         |     —      |
+| money / money.js          |        ✅        | ❌ you supply rates         |     —      |
+| dinero.js / currency.js   |        ✅        | ❌ math/format only         |     —      |
+
+With cashify or money.js you still have to find a rate source, fetch it, and keep it fresh. `live-currency-rates` does the fetch **and** the conversion in one call — and works with zero config out of the box.
+
 ## Providers
 
 Pick a provider based on your needs:
@@ -98,6 +111,54 @@ setup({
   baseUrl: '...',           // optional override
   timeout: 10000,           // ms, default 10000
 });
+```
+
+## Recipes
+
+### React — show prices in the user's currency
+
+```tsx
+import { useEffect, useState } from 'react';
+import { Convert } from 'live-currency-rates';
+
+function Price({ usd, currency }: { usd: number; currency: string }) {
+  const [local, setLocal] = useState<number | null>(null);
+
+  useEffect(() => {
+    Convert(usd).from('USD').to(currency).then(r => setLocal(r.amount));
+  }, [usd, currency]);
+
+  return <span>{local == null ? '…' : `${local.toFixed(2)} ${currency}`}</span>;
+}
+```
+
+### Express — a convert endpoint
+
+```javascript
+const express = require('express');
+const { Convert } = require('live-currency-rates');
+
+const app = express();
+
+// GET /convert?amount=100&from=USD&to=EUR
+app.get('/convert', async (req, res) => {
+  const { amount, from, to } = req.query;
+  const result = await Convert(Number(amount)).from(from).to(to);
+  res.json(result);
+});
+
+app.listen(3000);
+```
+
+### Next.js — server-side rate in a Route Handler
+
+```typescript
+import { Rate } from 'live-currency-rates';
+
+export async function GET() {
+  const { rate } = await Rate('USD').to('EUR');
+  return Response.json({ usdEur: rate });
+}
 ```
 
 ## CommonJS
