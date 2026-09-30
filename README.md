@@ -53,7 +53,7 @@ Convert(100).from('USD').to('EUR').then(r => console.log(r.amount));
 |---|---|---|---|
 | `frankfurter` *(default)* | no | ~30 currencies | European Central Bank daily reference rates, via `api.frankfurter.dev` |
 | `fawaz` | no | 200+ incl. crypto | `@fawazahmed0/currency-api`, served from the jsDelivr CDN |
-| `allrates` | yes | 160+ currencies | AllRatesToday — institutional interbank market data |
+| `allrates` | yes | 160+ currencies | AllRatesToday — mid-market rates, no retail spread |
 
 Provider selection is resolved per call: an explicit `provider` wins; otherwise supplying an `apiKey` selects `allrates`; otherwise `frankfurter`.
 
