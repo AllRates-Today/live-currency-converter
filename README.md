@@ -202,6 +202,15 @@ Live at [cahthuranag.github.io/live-currency-converter](https://cahthuranag.gith
 - **Tests:** `npm test` runs Vitest against `src/index.test.ts`. That suite was written against the earlier AllRatesToday-only API — it asserts an `amount` query parameter and a `{ from, to, rate }` response envelope that the current multi-provider `src/index.ts` does not produce — so parts of it fail until it is rewritten. Treat it as known-stale, not as a signal about the library.
 - **Rate freshness** depends on the provider: Frankfurter publishes daily ECB reference rates, while the AllRatesToday provider serves real-time mid-market rates.
 
+## 🤖 Use it from an AI agent
+
+The same rates are available to coding agents and LLM tools without a second integration:
+
+- **Claude Code plugin** (no key): `/plugin marketplace add AllRates-Today/claude-code-plugin` then `/plugin install allratestoday@allratestoday`
+- **Hosted MCP endpoint**: `https://allratestoday.com/api/mcp` — Streamable HTTP, keyless, nothing to install
+- **Local MCP servers**: `npx -y @allratestoday/mcp-server` (live mid-market rates) · `npx -y @allratestoday/central-bank-mcp` (official central-bank rates)
+- Machine-readable site guide: [llms.txt](https://allratestoday.com/llms.txt)
+
 ## 🔗 Links
 
 - **npm:** [live-currency-rates](https://www.npmjs.com/package/live-currency-rates)
