@@ -194,7 +194,7 @@ Every failure surfaces as a thrown `Error`:
 
 `docs/` contains a dependency-free converter page plus a 20-question FAQ, deployed to GitHub Pages by the `Deploy Pages` workflow (`.github/workflows/pages.yml`) on every push to `main`. The page imports the published package straight from `esm.sh` and converts using the free Frankfurter provider, so it needs no key and no build step.
 
-Live at [cahthuranag.github.io/live-currency-converter](https://cahthuranag.github.io/live-currency-converter/) — the canonical URL declared in `docs/index.html` and in the `homepage` field of `package.json`.
+Live at [allrates-today.github.io/live-currency-converter](https://allrates-today.github.io/live-currency-converter/) — the canonical URL declared in `docs/index.html` and in the `homepage` field of `package.json`.
 
 ## 💡 Notes
 

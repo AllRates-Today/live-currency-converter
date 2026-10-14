@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://cahthuranag.github.io/live-currency-converter/sitemap.xml
+Sitemap: https://allrates-today.github.io/live-currency-converter/sitemap.xml
