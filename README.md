@@ -99,10 +99,10 @@ const { rate, from, to } = await Rate('USD').to('EUR');
 
 ```typescript
 const rates = await Rates('USD', ['EUR', 'GBP', 'JPY']);
-// { EUR: …, GBP: …, JPY: … }
+// { EUR: …, GBP: …, JPY: … }  (with `frankfurter`, also USD: 1)
 ```
 
-Omit the target list to get every rate the provider publishes for that base. With `frankfurter`, the base currency is added back as `1` (the upstream API omits it).
+Omit the target list to get every rate the provider publishes for that base. With `frankfurter`, the base currency is always included as `1` (the upstream API omits it), whether or not you pass a target list.
 
 ### `Symbols`
 
@@ -209,7 +209,7 @@ The same rates are available to coding agents and LLM tools without a second int
 - **Claude Code plugin** (no key): `/plugin marketplace add AllRates-Today/claude-code-plugin` then `/plugin install allratestoday@allratestoday`
 - **Hosted MCP endpoint**: `https://allratestoday.com/api/mcp` — Streamable HTTP, keyless, nothing to install
 - **Local MCP servers**: `npx -y @allratestoday/mcp-server` (live mid-market rates) · `npx -y @allratestoday/central-bank-mcp` (official central-bank rates)
-- **Trial key for agents, no signup**: `POST https://allratestoday.com/api/agent/keys` (send `Content-Type: application/json`) returns a 100-call key valid 7 days, enough to try history and dated tables; both MCP servers expose it as `request_trial_key`
+- **Trial key for agents, no signup**: `POST https://allratestoday.com/api/agent/keys` (send `Content-Type: application/json`) returns a 100-call key valid 7 days, enough to try live rates and mid-market history (dated official tables need a paid plan); both MCP servers expose it as `request_trial_key`
 - **Daily Reference Rate** (first published 2026-10-12): one fixed USD table per business day, the 16:00 London median of minute samples, never revised — keyless at `https://allratestoday.com/api/open/reference-rate`, `get_reference_rate` in the MCP server
 - Machine-readable site guide: [llms.txt](https://allratestoday.com/llms.txt)
 
