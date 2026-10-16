@@ -24,15 +24,12 @@ function mockResponse(data: unknown, ok = true, status = 200) {
 
 describe('Convert', () => {
   it('converts amount with fluent API', async () => {
-    mockResponse({
-      from: { currency: 'USD', amount: 100 },
-      to: { currency: 'EUR', amount: 92.45 },
-      rate: 0.9245,
-    });
+    // /api/v1/rates answers with an array of { rate, source, target, time }.
+    mockResponse([{ rate: 0.9245, source: 'USD', target: 'EUR', time: '2026-10-16T08:00:00+0000' }]);
 
     const result = await Convert(100).from('USD').to('EUR');
 
-    expect(result.amount).toBe(92.45);
+    expect(result.amount).toBeCloseTo(92.45, 10);
     expect(result.rate).toBe(0.9245);
     expect(result.from).toBe('USD');
     expect(result.to).toBe('EUR');
@@ -41,15 +38,10 @@ describe('Convert', () => {
     const url = new URL(mockFetch.mock.calls[0][0]);
     expect(url.searchParams.get('source')).toBe('USD');
     expect(url.searchParams.get('target')).toBe('EUR');
-    expect(url.searchParams.get('amount')).toBe('100');
   });
 
   it('normalizes currency codes to uppercase', async () => {
-    mockResponse({
-      from: { currency: 'USD', amount: 50 },
-      to: { currency: 'GBP', amount: 39.5 },
-      rate: 0.79,
-    });
+    mockResponse([{ rate: 0.79, source: 'USD', target: 'GBP', time: '2026-10-16T08:00:00+0000' }]);
 
     await Convert(50).from('usd').to('gbp');
 
@@ -58,15 +50,25 @@ describe('Convert', () => {
     expect(url.searchParams.get('target')).toBe('GBP');
   });
 
-  it('throws without API key', async () => {
-    setup(undefined as any);
+  it('throws when the allrates provider is chosen without an API key', async () => {
+    setup({ provider: 'allrates' });
     await expect(Convert(100).from('USD').to('EUR')).rejects.toThrow('API key required');
+  });
+
+  it('falls back to the keyless frankfurter provider when no key is set', async () => {
+    setup({});
+    mockResponse({ base: 'USD', date: '2026-10-16', rates: { EUR: 0.89 } });
+
+    const result = await Convert(100).from('USD').to('EUR');
+
+    expect(mockFetch.mock.calls[0][0]).toContain('frankfurter');
+    expect(result.rate).toBe(0.89);
   });
 });
 
 describe('Rate', () => {
   it('gets exchange rate between two currencies', async () => {
-    mockResponse({ rate: 0.9245 });
+    mockResponse([{ rate: 0.9245, source: 'USD', target: 'EUR', time: '2026-10-16T08:00:00+0000' }]);
 
     const result = await Rate('USD').to('EUR');
 
@@ -109,7 +111,7 @@ describe('Symbols', () => {
 
 describe('authentication', () => {
   it('sends Bearer token in Authorization header', async () => {
-    mockResponse({ rate: 1.0 });
+    mockResponse([{ rate: 1.0, source: 'USD', target: 'USD', time: '2026-10-16T08:00:00+0000' }]);
 
     await Rate('USD').to('USD');
 
@@ -118,11 +120,7 @@ describe('authentication', () => {
   });
 
   it('supports per-request config override', async () => {
-    mockResponse({
-      from: { currency: 'USD', amount: 10 },
-      to: { currency: 'EUR', amount: 9.2 },
-      rate: 0.92,
-    });
+    mockResponse([{ rate: 0.92, source: 'USD', target: 'EUR', time: '2026-10-16T08:00:00+0000' }]);
 
     await Convert(10, { apiKey: 'art_override_key' }).from('USD').to('EUR');
 
