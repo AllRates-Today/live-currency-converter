@@ -99,7 +99,7 @@ describe('Rates', () => {
 
 describe('Symbols', () => {
   it('returns currency symbols', async () => {
-    mockResponse({ symbols: { USD: 'United States Dollar', EUR: 'Euro' } });
+    mockResponse({ currencies: [{ code: 'USD', name: 'United States Dollar', symbol: '$' }, { code: 'EUR', name: 'Euro', symbol: '€' }], count: 2 });
 
     const symbols = await Symbols();
 

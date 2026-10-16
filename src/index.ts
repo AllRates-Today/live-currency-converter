@@ -150,12 +150,15 @@ async function fetchSymbols(cfg: ReturnType<typeof resolve>): Promise<Record<str
       throw new Error('API key required for `allrates` provider.');
     }
     const url = new URL('/api/v1/symbols', cfg.baseUrl || DEFAULT_ALLRATES_URL);
-    const data = await httpGet<{ symbols: Record<string, string> }>(
+    // The endpoint returns { currencies: [{ code, name, symbol }], count }.
+    const data = await httpGet<{ currencies?: Array<{ code: string; name: string }> }>(
       url.toString(),
       cfg.timeout,
       { Authorization: `Bearer ${cfg.apiKey}` },
     );
-    return data.symbols;
+    const out: Record<string, string> = {};
+    for (const c of data.currencies ?? []) out[c.code] = c.name;
+    return out;
   }
 
   if (cfg.provider === 'frankfurter') {
