@@ -66,7 +66,7 @@ setup({ apiKey: 'art_live_...' });     // implies provider: 'allrates'
 
 ## 🔑 Get your API key
 
-The `allrates` provider calls `https://allratestoday.com/api/v1/rates` and `/api/v1/symbols` with an `Authorization: Bearer <key>` header. Get a free key at **[allratestoday.com/register](https://allratestoday.com/register)**. Calling it without a key throws before any request is made.
+The `allrates` provider calls `https://allratestoday.com/api/v1/rates` and `/api/v1/symbols` with an `Authorization: Bearer <key>` header. Get a free key at **[allratestoday.com/register](https://allratestoday.com/register)**. Calling it without a key throws before any request is made. The keyed API sends no CORS headers, so in browser code use a keyless provider or call your own backend that holds the key.
 
 ## 📚 API reference
 
@@ -209,7 +209,7 @@ The same rates are available to coding agents and LLM tools without a second int
 - **Claude Code plugin** (no key): `/plugin marketplace add AllRates-Today/claude-code-plugin` then `/plugin install allratestoday@allratestoday`
 - **Hosted MCP endpoint**: `https://allratestoday.com/api/mcp` — Streamable HTTP, keyless, nothing to install
 - **Local MCP servers**: `npx -y @allratestoday/mcp-server` (live mid-market rates) · `npx -y @allratestoday/central-bank-mcp` (official central-bank rates)
-- **Trial key for agents, no signup**: `POST https://allratestoday.com/api/agent/keys` (send `Content-Type: application/json`) returns a 100-call key valid 7 days, enough to try live rates and mid-market history (dated official tables need a paid plan); both MCP servers expose it as `request_trial_key`
+- **Trial key for agents, no signup**: `POST https://allratestoday.com/api/agent/keys` (send `Content-Type: application/json`) returns a 100-call key valid 7 days, enough to try live rates (all history and dated rates, market and official, need a paid plan); both MCP servers expose it as `request_trial_key`
 - **Daily Reference Rate** (first published 2026-10-12): one fixed USD table per business day, the 16:00 London median of minute samples, never revised — keyless at `https://allratestoday.com/api/open/reference-rate`, `get_reference_rate` in the MCP server
 - Machine-readable site guide: [llms.txt](https://allratestoday.com/llms.txt)
 
