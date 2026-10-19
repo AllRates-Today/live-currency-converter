@@ -222,6 +222,7 @@ The same rates are available to coding agents and LLM tools without a second int
 - **Free API key:** [allratestoday.com/register](https://allratestoday.com/register)
 - **Status:** [allratestoday.com/status](https://allratestoday.com/status)
 - **Support:** [allratestoday.com/contact](https://allratestoday.com/contact)
+- **Dashboard:** [allratestoday.com/profile](https://allratestoday.com/profile)
 
 ## 📜 License
 
